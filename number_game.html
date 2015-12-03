@@ -7,6 +7,8 @@
          }
          td {
              text-align: center;
+             /* background-image: url('/basket.png');*/
+             background-color : #ffa500;
          }
      </style>
  </head>
@@ -29,11 +31,13 @@
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
    <script type="text/javascript">
-      var COUNT = 11;
+      var COUNT = (window.prompt("enter number of attempts", "10")*1 || 10)  + 1;
+      var TOTALCOUNT = COUNT;
       var wrongAttempts = 0;
       var correctAttempts = 0;
       var startTime = 0;
       var map = {};
+      var keyData = [];
       var WIDTH = window.innerWidth;
       var HEIGHT = window.innerHeight;
        function placeSingleNum(x1,x2,y1,y2){
@@ -91,6 +95,7 @@
                 var basket = $("#"+"i"+index)[0];
                   if(intersects(dv, basket)){
                         correct(dv);
+                        keyData.unshift('correct attempt' + dv.innerText + ": by mouse" );
                    }
                    for(var i=0;i<=9 ; i++){
                           if(i === index){
@@ -99,6 +104,8 @@
                           var otherBasket = $("#i"+i)[0];
                            if(intersects(dv, otherBasket)){
                                wrong(dv);
+                               keyData.unshift('wrong attempt '+dv.innerText + ": by mouse" );
+                               break;
                            }
                    }
            });
@@ -127,14 +134,18 @@
           return $(".draggable:visible").length === 0;
       }
       function printStats(){
-          var res = "GAME OVER. stats\nTotal attempts : "+(correctAttempts + wrongAttempts)+"\nCorrect Attempts : "+correctAttempts+"\nWrongAttempts : "+wrongAttempts;
+          var res = "GAME OVER. stats\nTotal balls : "+TOTALCOUNT+"\nTotal attempts : "+(correctAttempts + wrongAttempts)+"\nCorrect Attempts : "+correctAttempts+"\nWrong Attempts : "+wrongAttempts;
            res += "\nTime Taken : "+(Date.now() - startTime)/1000+" seconds";
+          res += "\ndata about method\n";
+          keyData.forEach(function(s){
+                res += s + "\n";
+          });
           alert(res);
           console.log(res);
       }
        init();
        $( ".draggable" ).draggable();
-       $("td").css('width', window.innerWidth/10).css('height', window.innerHeight/10).css('backgroundColor', ': #ffa500');
+       $("td").css('width', window.innerWidth/10).css('height', window.innerHeight/10);
        $("#baskets").css("position","absolute").css("bottom","0px");
        var interval = setInterval(checkIntersections, 5);
        startTime = Date.now();
@@ -149,8 +160,10 @@
                       dv.style.left = $('#i'+key).offset().left;
                       dv.style.top = $('#i'+key).offset().top;
                       correct(dv);
+                      keyData.unshift('correct attempt '+dv.innerText + ": by keyboard" );
                   } else {
                       wrong(dv);
+                      keyData.unshift('wrong attempt '+dv.innerText + ": by keyboard" );
                   }
 
               }
