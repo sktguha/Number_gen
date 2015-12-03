@@ -1,0 +1,23 @@
+  <html>
+  <body>
+    <div id='num' style="width:800px; height:400px"></div>
+    <div id='box'></div>
+   <script type="text/javascript">
+     function createNum(){
+        for(var i = 0; i<10;i++){
+            placeSingleNum(0, 700, 0, 300);
+        }
+     }
+       function placeSingleNum(x1,x2,y1,y2){
+            var dv = document.createElement("dv");
+           dv.style.position = 'absolute';
+           dv.style.width = dv.style.height = '20px';
+           dv.style.left = (x1 + Math.floor((Math.random()*(x2-x1))) ) + 'px';
+           dv.style.top = (y1 + Math.floor((Math.random()*(y2-y1))) ) + 'px';
+           dv.innerText = Math.floor(Math.random() * 9);
+           document.body.appendChild(dv);
+       }
+       createNum();
+   </script>
+  </body>
+  </html>
