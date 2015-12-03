@@ -151,7 +151,7 @@
        startTime = Date.now();
       //keyboard detection
       $( "body" ).keydown(function(e) {
-          if(e.ctrlKey && e.shiftKey){
+          if( e.ctrlKey){
               var key = e.keyCode;
               if(key >= 47 && key <= 57){
                    key -= 48;
@@ -168,6 +168,7 @@
 
               }
            }
+            e.preventDefault();
       });
    </script>
   </body>
