@@ -32,7 +32,7 @@
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
    <script type="text/javascript">
       var COUNT = (window.prompt("enter number of attempts", "10")*1 || 10)  + 1;
-      var TOTALCOUNT = COUNT;
+      var TOTALCOUNT = COUNT - 1 ;
       var wrongAttempts = 0;
       var correctAttempts = 0;
       var startTime = 0;
@@ -95,7 +95,7 @@
                 var basket = $("#"+"i"+index)[0];
                   if(intersects(dv, basket)){
                         correct(dv);
-                        keyData.unshift('correct attempt' + dv.innerText + ": by mouse" );
+                        keyData.push('correct attempt ' + dv.innerText + ": by mouse" );
                    }
                    for(var i=0;i<=9 ; i++){
                           if(i === index){
@@ -104,7 +104,7 @@
                           var otherBasket = $("#i"+i)[0];
                            if(intersects(dv, otherBasket)){
                                wrong(dv);
-                               keyData.unshift('wrong attempt '+dv.innerText + ": by mouse" );
+                               keyData.push('wrong attempt '+dv.innerText + ": by mouse" );
                                break;
                            }
                    }
@@ -160,10 +160,10 @@
                       dv.style.left = $('#i'+key).offset().left;
                       dv.style.top = $('#i'+key).offset().top;
                       correct(dv);
-                      keyData.unshift('correct attempt '+dv.innerText + ": by keyboard" );
+                      keyData.push('correct attempt '+dv.innerText + ": by keyboard" );
                   } else {
                       wrong(dv);
-                      keyData.unshift('wrong attempt '+dv.innerText + ": by keyboard" );
+                      keyData.push('wrong attempt '+dv.innerText + ": by keyboard" );
                   }
 
               }
