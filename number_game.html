@@ -59,20 +59,26 @@
      function checkIntersections(){
            $(".draggable").each(function(){
                 var dv = this;
-                var basket = $("#"+"i"+dv.innerText)[0];
-               if(intersects(BASKETS,dv)){
-                   if(intersects(dv, basket)){
+               var index = dv.innerText * 1;
+                var basket = $("#"+"i"+index)[0];
+                  if(intersects(dv, basket)){
                            dv.style.display = 'none';
                            document.body.removeChild(dv);
-                           alert(dv.innerText + " put into correct basket");
-                       correctAttempts ++;
-                   } else {
-                       alert(dv.innerText + " put into wrong basket");
-                       dv.style.left = $(dv).data("left");
-                       dv.style.top = $(dv).data("top");
-                       wrongAttempts ++;
+                           alert(index + " put into correct basket");
+                           correctAttempts ++;
                    }
-               }
+                   for(var i=0;i<=9 ; i++){
+                          if(i === index){
+                              continue;
+                          }
+                          var otherBasket = $("#i"+i)[0];
+                           if(intersects(dv, otherBasket)){
+                               alert(index + " put into wrong basket");
+                               dv.style.left = $(dv).data("left");
+                               dv.style.top = $(dv).data("top");
+                               wrongAttempts ++;
+                           }
+                   }
            });
               if(isGameOver()){
                   printStats();
