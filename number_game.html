@@ -63,15 +63,26 @@
                  rect1.top > rect2.bottom)
      }
       var BASKETS = $("#baskets")[0];
-     function checkIntersections(){
+      function correct(dv){
+          var index = dv.innerText;
+          dv.style.display = 'none';
+          alert(index + " put into correct basket");
+          correctAttempts ++;
+      }
+      function wrong(dv){
+          var index = dv.innerText;
+          alert(index + " put into wrong basket");
+          dv.style.left = $(dv).data("left");
+          dv.style.top = $(dv).data("top");
+          wrongAttempts ++;
+      }
+      function checkIntersections(){
            $(".draggable").each(function(){
                 var dv = this;
                var index = dv.innerText * 1;
                 var basket = $("#"+"i"+index)[0];
                   if(intersects(dv, basket)){
-                           dv.style.display = 'none';
-                           alert(index + " put into correct basket");
-                           correctAttempts ++;
+                        correct(dv);
                    }
                    for(var i=0;i<=9 ; i++){
                           if(i === index){
@@ -79,10 +90,7 @@
                           }
                           var otherBasket = $("#i"+i)[0];
                            if(intersects(dv, otherBasket)){
-                               alert(index + " put into wrong basket");
-                               dv.style.left = $(dv).data("left");
-                               dv.style.top = $(dv).data("top");
-                               wrongAttempts ++;
+                               wrong(dv);
                            }
                    }
            });
@@ -118,12 +126,13 @@
               var key = e.keyCode;
               if(key >= 48 && key <= 57){
                    key -= 48;
-                  $(".draggable").each(function(){
-                       if(this.innerText === key){
-                           this.style.display = 'none';
-                           COUNT --;
-                       }
-                  });
+                  var dv = $('.draggable:visible')[0];
+                  if(dv.innerText*1 === key){
+                      correct(dv);
+                  } else {
+                      wrong(dv);
+                  }
+
               }
            }
       });
