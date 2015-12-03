@@ -26,6 +26,7 @@
       var wrongAttempts = 0;
       var correctAttempts = 0;
       var startTime = 0;
+      var map = {};
        function placeSingleNum(x1,x2,y1,y2){
            var dv = document.createElement("dv");
            dv.style.position = 'absolute';
@@ -41,12 +42,18 @@
            document.body.appendChild(dv);
            dv.className = 'draggable';
            $(dv).data("left", left).data("top", top);
+           return dv;
        }
-       function createNum(){
-        for(var i = 0; i<10;i++){
-            placeSingleNum(0, window.innerWidth, 0, window.innerHeight/3);
-        }
-     }
+      function createNum(){
+          map[COUNT].style.display = 'block';
+      }
+       function init(){
+          for(var i=0;i<=COUNT;i++){
+            var dv = placeSingleNum(0, window.innerWidth, 0, window.innerHeight/3);
+            map[i] = dv;
+            dv.style.display = 'none';
+          }
+       }
      function intersects(a,b){
          var rect1= a.getBoundingClientRect();
          var rect2 = b.getBoundingClientRect();
@@ -63,7 +70,6 @@
                 var basket = $("#"+"i"+index)[0];
                   if(intersects(dv, basket)){
                            dv.style.display = 'none';
-                           document.body.removeChild(dv);
                            alert(index + " put into correct basket");
                            correctAttempts ++;
                    }
@@ -80,13 +86,19 @@
                            }
                    }
            });
-              if(isGameOver()){
-                  printStats();
-                  clearInterval(interval);
+              if(isEmpty()){
+                  COUNT --;
+                  if(COUNT <= 0 ){
+                      clearInterval(interval);
+                      printStats();
+                  } else {
+                      createNum();
+                  }
               }
+
       }
-      function isGameOver(){
-          return $(".draggable").length === 0;
+      function isEmpty(){
+          return $(".draggable:visible").length === 0;
       }
       function printStats(){
           var res = "GAME OVER. stats\nTotal attempts : "+(correctAttempts + wrongAttempts)+"\nCorrect Attempts : "+correctAttempts+"\nWrongAttempts : "+wrongAttempts;
@@ -94,12 +106,27 @@
           alert(res);
           console.log(res);
       }
-       createNum();
+       init();
        $( ".draggable" ).draggable();
        $("td").css('width', window.innerWidth/10).css('height', window.innerHeight/30).css('backgroundColor', ': #ffa500');
        $("#baskets").css("position","absolute").css("bottom","0px");
        var interval = setInterval(checkIntersections, 50);
        startTime = Date.now();
+      //keyboard detection
+      $( "body" ).keydown(function(e) {
+          if(e.ctrlKey && e.shiftKey){
+              var key = e.keyCode;
+              if(key >= 48 && key <= 57){
+                   key -= 48;
+                  $(".draggable").each(function(){
+                       if(this.innerText === key){
+                           this.style.display = 'none';
+                           COUNT --;
+                       }
+                  });
+              }
+           }
+      });
    </script>
   </body>
   </html>
