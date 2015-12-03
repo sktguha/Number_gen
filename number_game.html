@@ -6,29 +6,24 @@
   <body>
     <div id='num' style="height:400px"></div>
     <div id='box'></div>
-    <table><tr>
-        <td>0</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
+    <table id='baskets'><tr>
+        <td id='i0'>0</td>
+        <td id='i1'>1</td>
+        <td id='i2'>2</td>
+        <td id='i3'>3</td>
+        <td id='i4'>4</td>
+        <td id='i5'>5</td>
+        <td id='i6'>6</td>
+        <td id='i7'>7</td>
+        <td id='i8'>8</td>
+        <td id='i9'>9</td>
     </tr></table
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
    <script type="text/javascript">
-     function createNum(){
-        for(var i = 0; i<10;i++){
-            placeSingleNum(0, window.innerWidth, 0, window.innerHeight/3);
-        }
-     }
        function placeSingleNum(x1,x2,y1,y2){
-            var dv = document.createElement("dv");
+           var dv = document.createElement("dv");
            dv.style.position = 'absolute';
            dv.style.width = dv.style.height = '20px';
            dv.style.left = (x1 + Math.floor((Math.random()*(x2-x1))) ) + 'px';
@@ -36,13 +31,38 @@
            dv.innerText = Math.floor(Math.random() * 9);
            dv.style.backgroundColor = 'green';
            dv.style.color = 'white';
+           dv.style.cursor = 'pointer';
            document.body.appendChild(dv);
            dv.className = 'draggable';
        }
+       function createNum(){
+        for(var i = 0; i<10;i++){
+            placeSingleNum(0, window.innerWidth, 0, window.innerHeight/3);
+        }
+     }
+     function intersects(a,b){
+         var rect1= a.getBoundingClientRect();
+         var rect2 = b.getBoundingClientRect();
+         return !(rect1.right < rect2.left ||
+                 rect1.left > rect2.right ||
+                 rect1.bottom < rect2.top ||
+                 rect1.top > rect2.bottom)
+     }
+     function checkIntersections(){
+           $(".draggable").each(function(){
+                var dv = this;
+                var basket = $("#"+"i"+dv.innerText)[0];
+                   if(intersects(dv, basket)){
+                       dv.style.display = 'none';
+                       document.body.removeChild(dv);
+                   }
+           });
+      }
        createNum();
        $( ".draggable" ).draggable();
-       $("td").css('width', window.innerWidth/10);
-       $("td").css('backgroundColor', ': #ffa500');
+       $("td").css('width', window.innerWidth/10).css('height', window.innerHeight/30).css('backgroundColor', ': #ffa500');
+       $("#baskets").css("position","absolute").css("bottom","0px");
+       setInterval(checkIntersections, 50);
    </script>
   </body>
   </html>
