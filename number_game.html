@@ -1,11 +1,19 @@
   <html>
+ <head>
+     <style type="text/css">
+
+     </style>
+ </head>
   <body>
-    <div id='num' style="width:800px; height:400px"></div>
+    <div id='num' style="height:400px"></div>
     <div id='box'></div>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
    <script type="text/javascript">
      function createNum(){
         for(var i = 0; i<10;i++){
-            placeSingleNum(0, 700, 0, 300);
+            placeSingleNum(0, window.innerWidth, 0, 300);
         }
      }
        function placeSingleNum(x1,x2,y1,y2){
@@ -18,8 +26,22 @@
            dv.style.backgroundColor = 'green';
            dv.style.color = 'white';
            document.body.appendChild(dv);
+           dv.className = 'draggable';
        }
        createNum();
+       $( ".draggable" ).draggable();
    </script>
+  <table><tr>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+  </tr></table>
   </body>
   </html>
