@@ -15,6 +15,8 @@
            dv.style.left = (x1 + Math.floor((Math.random()*(x2-x1))) ) + 'px';
            dv.style.top = (y1 + Math.floor((Math.random()*(y2-y1))) ) + 'px';
            dv.innerText = Math.floor(Math.random() * 9);
+           dv.style.backgroundColor = 'green';
+           dv.style.color = 'white';
            document.body.appendChild(dv);
        }
        createNum();
