@@ -22,18 +22,25 @@
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
    <script type="text/javascript">
+      var COUNT = 20;
+      var wrongAttempts = 0;
+      var correctAttempts = 0;
+      var startTime = 0;
        function placeSingleNum(x1,x2,y1,y2){
            var dv = document.createElement("dv");
            dv.style.position = 'absolute';
            dv.style.width = dv.style.height = '20px';
-           dv.style.left = (x1 + Math.floor((Math.random()*(x2-x1))) ) + 'px';
-           dv.style.top = (y1 + Math.floor((Math.random()*(y2-y1))) ) + 'px';
+           var left =  (x1 + Math.floor((Math.random()*(x2-x1))) ) + 'px';
+           var top =   (y1 + Math.floor((Math.random()*(y2-y1))) ) + 'px';
+           dv.style.left = left;
+           dv.style.top =  top;
            dv.innerText = Math.floor(Math.random() * 9);
            dv.style.backgroundColor = 'green';
            dv.style.color = 'white';
            dv.style.cursor = 'pointer';
            document.body.appendChild(dv);
            dv.className = 'draggable';
+           $(dv).data("left", left).data("top", top);
        }
        function createNum(){
         for(var i = 0; i<10;i++){
@@ -48,21 +55,45 @@
                  rect1.bottom < rect2.top ||
                  rect1.top > rect2.bottom)
      }
+      var BASKETS = $("#baskets")[0];
      function checkIntersections(){
            $(".draggable").each(function(){
                 var dv = this;
                 var basket = $("#"+"i"+dv.innerText)[0];
+               if(intersects(BASKETS,dv)){
                    if(intersects(dv, basket)){
-                       dv.style.display = 'none';
-                       document.body.removeChild(dv);
+                           dv.style.display = 'none';
+                           document.body.removeChild(dv);
+                           alert(dv.innerText + " put into correct basket");
+                       correctAttempts ++;
+                   } else {
+                       alert(dv.innerText + " put into wrong basket");
+                       dv.style.left = $(dv).data("left");
+                       dv.style.top = $(dv).data("top");
+                       wrongAttempts ++;
                    }
+               }
            });
+              if(isGameOver()){
+                  printStats();
+                  clearInterval(interval);
+              }
+      }
+      function isGameOver(){
+          return $(".draggable").length === 0;
+      }
+      function printStats(){
+          var res = "GAME OVER. stats\nTotal attempts : "+(correctAttempts + wrongAttempts)+"\nCorrect Attempts : "+correctAttempts+"\nWrongAttempts : "+wrongAttempts;
+           res += "\nTime Taken : "+(Date.now() - startTime)/1000+" seconds";
+          alert(res);
+          console.log(res);
       }
        createNum();
        $( ".draggable" ).draggable();
        $("td").css('width', window.innerWidth/10).css('height', window.innerHeight/30).css('backgroundColor', ': #ffa500');
        $("#baskets").css("position","absolute").css("bottom","0px");
-       setInterval(checkIntersections, 50);
+       var interval = setInterval(checkIntersections, 50);
+       startTime = Date.now();
    </script>
   </body>
   </html>
