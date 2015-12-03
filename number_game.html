@@ -27,6 +27,8 @@
       var correctAttempts = 0;
       var startTime = 0;
       var map = {};
+      var WIDTH = window.innerWidth;
+      var HEIGHT = window.innerHeight;
        function placeSingleNum(x1,x2,y1,y2){
            var dv = document.createElement("dv");
            dv.style.position = 'absolute';
@@ -49,7 +51,7 @@
       }
        function init(){
           for(var i=0;i<=COUNT;i++){
-            var dv = placeSingleNum(70, window.innerWidth-70, 70, window.innerHeight/3);
+            var dv = placeSingleNum(70, WIDTH-70, 70, HEIGHT/3);
             map[i] = dv;
             dv.style.display = 'none';
           }
@@ -125,9 +127,9 @@
       }
        init();
        $( ".draggable" ).draggable();
-       $("td").css('width', window.innerWidth/10).css('height', window.innerHeight/30).css('backgroundColor', ': #ffa500');
+       $("td").css('width', window.innerWidth/10).css('height', window.innerHeight/10).css('backgroundColor', ': #ffa500');
        $("#baskets").css("position","absolute").css("bottom","0px");
-       var interval = setInterval(checkIntersections, 50);
+       var interval = setInterval(checkIntersections, 5);
        startTime = Date.now();
       //keyboard detection
       $( "body" ).keydown(function(e) {
