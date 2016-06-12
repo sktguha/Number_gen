@@ -8,7 +8,7 @@ Qualtrics.SurveyEngine.addOnload(function()
     var src1 = "https://code.jquery.com/jquery-1.10.2.js", src2 = "https://code.jquery.com/ui/1.11.4/jquery-ui.js";
     window.mainDataObj = this;
     var inittrials = function(){
-        document.createElement("div");
+        var dvAttempts = document.createElement("div");
         dvAttempts.style.position = 'absolute';
         dvAttempts.style.right = '70px';
         dvAttempts.style.top = '100px';
@@ -16,10 +16,11 @@ Qualtrics.SurveyEngine.addOnload(function()
         dvAttempts.style.color = 'white';
         dvAttempts.setAttribute('id', 'Attempts_numberinthegame');
         document.body.appendChild(dvAttempts);
-        dvAttempts.className= 'attempts';
-        $('.attempts').show();
+        dvAttempts.className = 'attempts';
+        return dvAttempts;
     }
-    var dvAttempts = inittrials();
+    //global variable made intentionally . for some reason correct() function can't refer to dvAttempts
+    dvAttempts = inittrials();
     appendScript(src1, function(){
         appendScript(src2, function(){
             main();
@@ -84,21 +85,23 @@ function main(){
         dvTimer.style.color = 'white';
         dvTimer.setAttribute('id', 'timer_numberinthegame');
         document.body.appendChild(dvTimer);
-        var ct = 0;
+        var ct =15 ;
         setInterval(function(){
-            ct++;
-            dvTimer.innerText = "Time Elapsed: " +secondstotime(180-ct);
-            //end survey if 3 mins have passed
-            if(ct > 3*60){
-               window.mainDataObj.clickNextButton(); 
-            }
+            ct--;
+			if ( ct == 0)
+			{
+				clearInterval(interval);
+            cleartrials();
+                printStats();
+			}
+            dvTimer.innerText = "Time Elapsed: " +secondstotime(ct);
         }, 1000);
 
     }
-	function cleartrials()
-	{
-	    $('.attempts').hide();
-	}
+    function cleartrials()
+    {
+        $('.attempts').hide();
+    }
     function secondstotime(secs) {
         var t = new Date(1970,0,1);
         t.setSeconds(secs);
@@ -139,7 +142,6 @@ function main(){
             var basket = $("#"+"i"+index)[0];
             if(intersects(dv, basket)){
                 correct(dv);
-                dvAttempts.innerText = "Its done";
                 keyData.push('correct attempt ' + dv.innerText + ": by mouse" );
                 correctAttemptMouse ++;
             }
@@ -162,7 +164,7 @@ function main(){
             COUNT --;
             if(COUNT <= 0 ){
                 clearInterval(interval);
-   			cleartrials();
+            cleartrials();
                 printStats();
             } else {
                 createNum();
@@ -183,6 +185,7 @@ function main(){
         return $(".draggable:visible").length === 0;
     }
     function printStats(){
+        dvAttempts.innerText = "Its done";
         var res = "GAME OVER. stats\nTotal balls : "+TOTALCOUNT+"\nTotal attempts : "+(correctAttempts + wrongAttempts)+"\nCorrect Attempts : "+correctAttempts+"\nWrong Attempts : "+wrongAttempts;
         res += "\nTime Taken : "+(Date.now() - startTime)/1000+" seconds";
         res += "\ndata about method\n";
@@ -224,9 +227,9 @@ function main(){
     startTime = Date.now();
 //keyboard detection
     $( "body" ).keydown(function(e) {
-		var modifier = e.ctrlKey || e.metaKey;
+        var modifier = e.ctrlKey || e.metaKey;
         if( modifier && e.shiftKey && e.altKey){
-			 
+             
             var key = e.keyCode;
             if(key >= 47 && key <= 57){
                 key -= 48;
