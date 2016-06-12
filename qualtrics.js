@@ -85,16 +85,30 @@ function main(){
         dvTimer.style.color = 'white';
         dvTimer.setAttribute('id', 'timer_numberinthegame');
         document.body.appendChild(dvTimer);
+        var dvRate = document.createElement("div");
+        dvRate.style.position = 'absolute';
+        dvRate.style.right = '70px';
+        dvRate.style.top = '120px';
+        dvRate.style.backgroundColor = 'black';
+        dvRate.style.color = 'white';
+        dvRate.setAttribute('id', 'rate_numberinthegame');
+        document.body.appendChild(dvRate);
         var ct =15 ;
         setInterval(function(){
             ct--;
-			if ( ct == 0)
-			{
-				clearInterval(interval);
+            if ( ct <= 0)
+            {
+                clearInterval(interval);
             cleartrials();
                 printStats();
-			}
+                 $('.draggable').hide();
+                dvRate.hide();
+            }
+            var rate = 0;
+            rate = (correctAttempts/ (15 - ct)) * 20;
+            rate = rate.toFixed(2);
             dvTimer.innerText = "Time Elapsed: " +secondstotime(ct);
+            dvRate.innerText = "Rate:" +rate.toString();
         }, 1000);
 
     }
@@ -123,8 +137,8 @@ function main(){
         //alert(index + " put into correct basket");
         dv.style.display = 'none';
         correctAttempts ++;
-        var trials = TOTALCOUNT - correctAttempts;
-        dvAttempts.innerText = "Trials left: " + trials.toString();
+        var trials = correctAttempts;
+        dvAttempts.innerText = "Trials completed: " + trials.toString();
 
 
     }
